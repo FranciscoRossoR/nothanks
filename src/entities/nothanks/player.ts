@@ -57,4 +57,20 @@ export default class NoThanksPlayer extends Player {
         const chips = this._pool.getResources(chipType) || 0;
         return chips > 0;
     }
+
+    /// Setters
+
+    public setPool(pool: ResourcesPool<Resources>) {
+        this._pool = pool;
+        }
+
+    public setColor(color: string) {
+        this.color = color;
+    }
+
+    public setCards(cards: OrderedCardHolder<NoThanksCard>) {
+        this._cards = cards;
+    }
+
+    ///
 }

@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-
+import React, { useEffect, useRef, useState } from 'react';
+//s
 import { observer } from 'mobx-react';
 import {
     Button, Box, Center,
@@ -7,7 +7,11 @@ import {
     Flex, useDimensions, useDisclosure, HStack
 } from '@chakra-ui/react';
 
-import gameState from 'pages/store';
+/// Para pruebas sin callAddPlayer
+import gameState, { callAddPlayer } from 'pages/store';
+// import { callAddPlayer } from 'pages/store';
+// import gameState from 'pages/store';
+///
 
 import NoThanksPlayer from 'src/entities/nothanks/player';
 import { chipType } from 'src/entities/nothanks/common'
@@ -15,12 +19,17 @@ import { chipType } from 'src/entities/nothanks/common'
 import PlayerProfile from 'src/components/PlayerProfile';
 import MiniPlayerProfile from 'src/components/MiniPlayerProfile';
 
+///
+const debugArea = require('public/debugArea.js');
+///
+
 
 export interface IPanelProps {
 }
 
 function onAddPlayer(event: React.MouseEvent<HTMLButtonElement>) {
     gameState.addPlayer("Player " + (gameState.players.length + 1));
+    callAddPlayer(gameState);
 }
 
 function onStart(event: React.MouseEvent<HTMLButtonElement>) {
@@ -38,8 +47,30 @@ export default observer(function SummaryPanel(props: IPanelProps) {
     }
     const { isOpen, onOpen, onClose } = useDisclosure();
 
+    ///
+    // Usando el if de isClient cambian cada vez
+    const [isClient, setIsClient] = useState(false);
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+    ///
+
     return (
+
+        ///
+        isClient ?
+        ///
+
         <Box ref={boxRef} __css={isMiniVersion ? sticky : {}} bgColor="brand.50">
+
+            {/*  */}
+            <div>
+                <script>
+                    { debugArea('ACTUAL GAMESTATE', gameState) }
+                </script>
+            </div>
+            {/*  */}
+
             <Flex bgColor="brand.50" justifyContent="center">
                 {gameState.players.map((p: NoThanksPlayer, index: number) => {
                     const chips = p._pool.getResources(chipType) || 0;
@@ -71,6 +102,11 @@ export default observer(function SummaryPanel(props: IPanelProps) {
                 : null}
 
         </Box>
+
+        ///
+        : <h1>Loading...</h1>
+        ///
+        
     )
 }
 )

@@ -11,6 +11,10 @@ import { NoThanksCard } from "./nothankscard";
 import { Resources, chipType } from "./common";
 import NoThanksPlayer from "./player";
 
+///
+import GameHistory from "../framework/gameHistory";
+///
+
 export default class NoThanksState extends GameState {
     protected _players: NoThanksPlayer[];  
     deck: CardHolder<NoThanksCard>;
@@ -18,9 +22,10 @@ export default class NoThanksState extends GameState {
     whoisturn: number;
     pool: ResourcesPool<Resources>;
 
-    public constructor(players: NoThanksPlayer[], gameElements: UniqueGameElement[], status?: GameStatus, complexityAnalyst?: ComplexityAnalyst) {
+    public constructor(players?: NoThanksPlayer[], gameElements?: UniqueGameElement[], status?: GameStatus, complexityAnalyst?: ComplexityAnalyst) {
+        gameElements = [];
         super(3, 5, players, gameElements, status, complexityAnalyst);
-        this._players = players;
+        this._players = players ? players : [];
         this.deck = new CardHolder<NoThanksCard>();
         this.removedCards = new CardHolder<NoThanksCard>();
         for (let i = 3; i <= 35; i++) {
@@ -150,5 +155,59 @@ export default class NoThanksState extends GameState {
         }
         return winners;
     }
+
+    /// Setters
+
+    public setPlayers(players: NoThanksPlayer[]) {
+        this._players = players;
+    }
+
+    public setStatus(status: GameStatus) {
+        this.status = status;
+    }
+
+    public setDeck(deck: CardHolder<NoThanksCard>) {
+        this.deck = deck;
+    }
+
+    public setRemovedCards(removedCards: CardHolder<NoThanksCard>) {
+        this.removedCards = removedCards;
+    }
+
+    public setWhoisturn(whoisturn: number) {
+        this.whoisturn = whoisturn;
+    }
+
+    public setPool(pool: ResourcesPool<Resources>) {
+        this.pool = pool;
+    }
+
+    public setHistory(history: GameHistory) {
+        this.history = history;
+    }
+
+    ///
+
+    // public updateState(newState: NoThanksState) {
+    //     this.setPlayers(newState._players);
+    //     this.setStatus(newState.status);
+    //     this.setDeck(newState.deck);
+    //     this.setRemovedCards(newState.removedCards);
+    //     this.setWhoisturn(newState.whoisturn);
+    //     this.setPool(newState.pool);
+    //     this.setHistory(newState.history);
+    // }
+
+    public updateState(newState: NoThanksState) {
+        this._players = newState._players;
+        this.status = newState.status;
+        this.deck = newState.deck;
+        this.removedCards = newState.removedCards;
+        this.whoisturn = newState.whoisturn;
+        this.pool = newState.pool;
+        this.history = newState.history;
+    }
+
+    ///
 
 }
