@@ -16,7 +16,7 @@ import GameHistory from "../framework/gameHistory";
 ///
 
 export default class NoThanksState extends GameState {
-    protected _players: NoThanksPlayer[];  
+    // protected _players: NoThanksPlayer[];  
     deck: CardHolder<NoThanksCard>;
     removedCards: CardHolder<NoThanksCard>;
     whoisturn: number;
@@ -24,8 +24,8 @@ export default class NoThanksState extends GameState {
 
     public constructor(players?: NoThanksPlayer[], gameElements?: UniqueGameElement[], status?: GameStatus, complexityAnalyst?: ComplexityAnalyst) {
         gameElements = [];
-        super(3, 5, players, gameElements, status, complexityAnalyst);
-        this._players = players ? players : [];
+        super(3, 5, players ? players : [], gameElements, status, complexityAnalyst);
+        // this._players = players ? players : [];
         this.deck = new CardHolder<NoThanksCard>();
         this.removedCards = new CardHolder<NoThanksCard>();
         for (let i = 3; i <= 35; i++) {
@@ -39,7 +39,7 @@ export default class NoThanksState extends GameState {
         this.pool = new ResourcesPool();
         this.pool.addResources(chipType, 0);
         makeObservable(this, {
-            players: override,
+            // players: observable,
             availableActions: override,
             status: override,
             gameElements: override,
@@ -58,12 +58,16 @@ export default class NoThanksState extends GameState {
             currentWinners: computed,
             addChipToPool: action,
             removeChipFromPool: action,
+
+            ///
+            updateState: action,
+            ///
         });
     }
 
-    public get players(): NoThanksPlayer[] {
-        return this._players;
-    }
+    // public get players(): NoThanksPlayer[] {
+    //     return this._players;
+    // }
 
     protected computeAvailableActions(): GameAction[] {
         const res: GameAction[] = [];
@@ -80,8 +84,12 @@ export default class NoThanksState extends GameState {
         return res;
     }
 
+    public getPlayer(index: number): NoThanksPlayer {
+        return <NoThanksPlayer> this.players[index];
+    }
+
     public get playerHasEnoughChips(): boolean {
-        const chips = this.players[this.whoisturn]._pool.getResources(chipType) || 0;
+        const chips = (<NoThanksPlayer>(this.players[this.whoisturn]))._pool.getResources(chipType) || 0;
         return (chips > 0);
     }
 
@@ -115,9 +123,9 @@ export default class NoThanksState extends GameState {
     }
 
     public playerGetsCurrentCard(): NoThanksState {
-        this.deck.pop(this.players[this.whoisturn]._cards);
+        this.deck.pop(this.getPlayer(this.whoisturn)._cards);
         const chips = this.pool.removeAllFromResource(chipType);
-        this.players[this.whoisturn]._pool.addResources(chipType, chips);
+        this.getPlayer(this.whoisturn)._pool.addResources(chipType, chips);
         if (!this.deck.hasCards) {
             this.status = "finished";
         }
@@ -125,10 +133,10 @@ export default class NoThanksState extends GameState {
     }
 
     public undoPlayerGetsCurrentCard(card: NoThanksCard, chipsAmount: number): NoThanksState {
-        this.players[this.whoisturn]._cards.removeCard(card);
+        this.getPlayer(this.whoisturn)._cards.removeCard(card);
         this.deck.addCard(card);
         this.pool.addResources(chipType, chipsAmount);
-        this.players[this.whoisturn]._pool.removeResources(chipType, chipsAmount);
+        this.getPlayer(this.whoisturn)._pool.removeResources(chipType, chipsAmount);
         return this;
     }
 
@@ -139,18 +147,18 @@ export default class NoThanksState extends GameState {
     }
 
     public get currentPlayer(): NoThanksPlayer {
-        return this.players[this.whoisturn];
+        return this.getPlayer(this.whoisturn);
     }
 
     // return the player with the highest score
     public get currentWinners(): NoThanksPlayer[] {
-        let winners = [this.players[0]];
-        let score = this.players[0].score;
+        let winners = [this.getPlayer(0)];
+        let score = this.getPlayer(0).score;
         for (let i = 1; i < this.players.length; i++) {
-            if (this.players[i].score > score) {
-                winners = [this.players[i]];
-            } else if (this.players[i].score == score) {
-                winners.push(this.players[i]);
+            if (this.getPlayer(i).score > score) {
+                winners = [this.getPlayer(i)];
+            } else if (this.getPlayer(i).score == score) {
+                winners.push(this.getPlayer(i));
             }
         }
         return winners;
@@ -159,7 +167,7 @@ export default class NoThanksState extends GameState {
     /// Setters
 
     public setPlayers(players: NoThanksPlayer[]) {
-        this._players = players;
+        this.players = players;
     }
 
     public setStatus(status: GameStatus) {
@@ -199,7 +207,7 @@ export default class NoThanksState extends GameState {
     // }
 
     public updateState(newState: NoThanksState) {
-        this._players = newState._players;
+        this.players = newState.players;
         this.status = newState.status;
         this.deck = newState.deck;
         this.removedCards = newState.removedCards;

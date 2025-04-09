@@ -63,7 +63,7 @@ socket.on('updateState', newState => {
 
     const updatedState = new NoThanksState();
     // Set players
-    const players = newState._players.map((playerData: any) => {
+    const players = newState.players.map((playerData: any) => {
 
         // debugArea("NEW GAMESTATE PLAYER DATA",playerData);
         // debugArea("NEW GAMESTATE PLAYER NAME", playerData.name);
@@ -138,9 +138,9 @@ socket.on('updateState', newState => {
 
     // debugArea("UPDATING GAMESTATE", updatedState);
 
-    gameState = updatedState;
+    // gameState = updatedState;
     // Object.assign(gameState, updatedState);
-    // gameState.updateState(updatedState);
+    gameState.updateState(updatedState);
 
     // debugArea("CHECKING EQUALS", JSON.stringify(gameState) === JSON.stringify(updatedState));
 
@@ -170,8 +170,8 @@ socket.on('updateState', newState => {
     // debugArea("UPDATED GAMESTATE PLAYER CARDS", gameState.players[0]._cards);
     // debugArea("UPDATED GAMESTATE PLAYER CARDS CARDS", gameState.players[0]._cards.cards);
 
-    const sampleState = new NoThanksState();
-    sampleState.addPlayer("Player " + (sampleState.players.length + 1));
+    // const sampleState = new NoThanksState();
+    // sampleState.addPlayer("Player " + (sampleState.players.length + 1));
 
     // debugArea("SAMPLE GAMESTATE TYPE", sampleState.constructor.name);
     // debugArea("SAMPLE GAMESTATE", sampleState);

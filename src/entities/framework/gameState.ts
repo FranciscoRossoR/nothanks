@@ -8,12 +8,18 @@ import ComplexityAnalyst from "./complexityAnalyst";
 export type GameStatus = "open" | "playing" | "finished";
 
 export default abstract class GameState {
+
+    players: Player[];
+
     gameElements: UniqueGameElement[];
     complexityAnalyst?: ComplexityAnalyst;
     status: GameStatus;
     history: GameHistory;
 
-    public constructor (protected _minPlayers = 1, protected _maxPlayers = 5, protected _players: Player[] = [], gameElements: UniqueGameElement[], status?: GameStatus, complexityAnalyst?: ComplexityAnalyst) {
+    public constructor (protected _minPlayers = 1, protected _maxPlayers = 5, players: Player[] = [], gameElements: UniqueGameElement[], status?: GameStatus, complexityAnalyst?: ComplexityAnalyst) {
+
+        this.players = players;
+
         this.gameElements = gameElements;
         this.complexityAnalyst = complexityAnalyst;
         if (status) {
@@ -23,7 +29,10 @@ export default abstract class GameState {
         }
         this.history = new GameHistory();
         makeObservable (this, {
-            players: computed,
+
+            players: observable,
+
+            // players: computed,
             availableActions: computed,
             status: observable,
             gameElements: observable,
@@ -44,9 +53,9 @@ export default abstract class GameState {
         return this._maxPlayers;
     }
 
-    public get players() : Player[] {
-        return this._players;
-    }
+    // public get players() : Player[] {
+    //     return this._players;
+    // }
 
     public get availableActions () : GameAction[] {
         const res = this.computeAvailableActions ();

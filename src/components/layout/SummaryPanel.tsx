@@ -18,6 +18,7 @@ import { chipType } from 'src/entities/nothanks/common'
 
 import PlayerProfile from 'src/components/PlayerProfile';
 import MiniPlayerProfile from 'src/components/MiniPlayerProfile';
+import Player from 'src/entities/framework/player';
 
 ///
 const debugArea = require('public/debugArea.js');
@@ -28,7 +29,9 @@ export interface IPanelProps {
 }
 
 function onAddPlayer(event: React.MouseEvent<HTMLButtonElement>) {
+    debugArea("BEFORE ADDING PLAYER", gameState);
     gameState.addPlayer("Player " + (gameState.players.length + 1));
+    debugArea("AFTER ADDING PLAYER", gameState);
     callAddPlayer(gameState);
 }
 
@@ -72,11 +75,12 @@ export default observer(function SummaryPanel(props: IPanelProps) {
             {/*  */}
 
             <Flex bgColor="brand.50" justifyContent="center">
-                {gameState.players.map((p: NoThanksPlayer, index: number) => {
-                    const chips = p._pool.getResources(chipType) || 0;
+                {gameState.players.map((p: Player, index: number) => {
+                    const ntp = p as NoThanksPlayer;
+                    const chips = ntp._pool.getResources(chipType) || 0;
                     const isCurrent = gameState.whoisturn === index;
                     const info = new Map<string, string>().
-                        set("Score", p.score.toString()).
+                        set("Score", ntp.score.toString()).
                         set("Chips", chips.toString());
                     return (
                         isMiniVersion
