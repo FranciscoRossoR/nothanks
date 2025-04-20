@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react';
 
 /// Para pruebas sin callAddPlayer
-import gameState, { callAddPlayer } from 'pages/store';
+import gameState, { callAddPlayer, callUpdateState } from 'pages/store';
 // import { callAddPlayer } from 'pages/store';
 // import gameState from 'pages/store';
 ///
@@ -32,11 +32,13 @@ function onAddPlayer(event: React.MouseEvent<HTMLButtonElement>) {
     debugArea("BEFORE ADDING PLAYER", gameState);
     gameState.addPlayer("Player " + (gameState.players.length + 1));
     debugArea("AFTER ADDING PLAYER", gameState);
-    callAddPlayer(gameState);
+    // callAddPlayer(gameState);
+    callUpdateState(gameState);
 }
 
 function onStart(event: React.MouseEvent<HTMLButtonElement>) {
     gameState.startGame();
+    callUpdateState(gameState);
 }
 
 export default observer(function SummaryPanel(props: IPanelProps) {

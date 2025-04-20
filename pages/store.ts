@@ -19,6 +19,10 @@ var gameState = new NoThanksState();
 
 export default gameState;
 
+export function callUpdateState(emittedState: NoThanksState) {
+    socket.emit('callUpdateState', emittedState);
+}
+
 export function callAddPlayer(emittedState: NoThanksState) {
 
     // Testing

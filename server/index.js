@@ -11,4 +11,8 @@ io.on('connection', (socket) => {
     socket.on('addPlayer', (newState) => {
         io.emit('updateState', newState)
     })
+
+    socket.on('callUpdateState', (newState) => {
+        io.emit('updateState', newState)
+    })
 })
