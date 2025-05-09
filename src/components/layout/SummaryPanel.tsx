@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react';
 
 /// Para pruebas sin callAddPlayer
-import gameState, { callAddPlayer, callUpdateState } from 'pages/store';
+import gameState, { callAddPlayer, callUpdateDeck, callUpdateGameStateStatus, callUpdateHistory, callUpdatePlayers, callUpdatePool, callUpdateState, callUpdateWhoIsTurn } from 'pages/store';
 // import { callAddPlayer } from 'pages/store';
 // import gameState from 'pages/store';
 ///
@@ -19,6 +19,7 @@ import { chipType } from 'src/entities/nothanks/common'
 import PlayerProfile from 'src/components/PlayerProfile';
 import MiniPlayerProfile from 'src/components/MiniPlayerProfile';
 import Player from 'src/entities/framework/player';
+import { autorun, reaction, toJS } from 'mobx';
 
 ///
 const debugArea = require('public/debugArea.js');
@@ -29,16 +30,18 @@ export interface IPanelProps {
 }
 
 function onAddPlayer(event: React.MouseEvent<HTMLButtonElement>) {
-    debugArea("BEFORE ADDING PLAYER", gameState);
+    // debugArea("BEFORE ADDING PLAYER", gameState);
     gameState.addPlayer("Player " + (gameState.players.length + 1));
-    debugArea("AFTER ADDING PLAYER", gameState);
+    // debugArea("AFTER ADDING PLAYER", gameState);
     // callAddPlayer(gameState);
-    callUpdateState(gameState);
+    // callUpdateState(gameState);
+    callUpdatePlayers(gameState.players);
 }
 
 function onStart(event: React.MouseEvent<HTMLButtonElement>) {
     gameState.startGame();
-    callUpdateState(gameState);
+    // callUpdateState(gameState);
+    callUpdateDeck(gameState.deck);
 }
 
 export default observer(function SummaryPanel(props: IPanelProps) {
@@ -137,3 +140,44 @@ function NewPlayerDrawer(props: IDrawerProps) {
         </Drawer>
     );
 }
+
+///
+
+// PLAYERS
+// reaction(() => gameState.players, players => {callUpdatePlayers(players)});
+// autorun(() => { callUpdatePlayers(gameState.players) });
+// autorun(() => { callUpdatePlayers(gameState.players), gameState.players.length})
+
+// WHOISTURN
+// reaction(() => gameState.whoisturn, whoisturn => {callUpdateWhoIsTurn(whoisturn)});
+// autorun(() => {
+    //     callUpdateWhoIsTurn(gameState.whoisturn,
+    //         gameState.players)
+    // });
+// reaction(() => gameState.whoisturn, () => {callUpdateWhoIsTurn(gameState.whoisturn, gameState.players)});
+reaction(() => gameState.whoisturn, () => {callUpdateWhoIsTurn(gameState.whoisturn,
+    gameState.players,
+    gameState.deck)});
+    
+// GAMESTATE STATUS
+// autorun(() => {
+    //     callUpdateGameStateStatus(gameState.status,
+    //         gameState.players)
+    // });
+reaction(() => gameState.status, () => {callUpdateGameStateStatus(gameState.status,
+    gameState.players)});
+
+// DECK
+// Este por algún motivo hace que no cojan cartas
+// reaction(() => gameState.deck.size, () => {callUpdateDeck(gameState.deck)})
+// reaction(() => gameState.deck, () => {callUpdateDeck(gameState.deck)})   // No sincroniza
+// autorun(() => { callUpdateDeck(gameState.deck) });   // No sincroniza
+// reaction(() => gameState.deck.cards, () => {callUpdateDeck(gameState.deck)}) // No sincroniza
+
+// POOL
+reaction(() => gameState.pool._pool.get('chips'), () => {callUpdatePool(gameState.pool)});
+
+// HISTORY
+// reaction(() => gameState.history, () => {callUpdateHistory(gameState.history)});
+
+///

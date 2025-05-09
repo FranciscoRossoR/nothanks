@@ -3,6 +3,10 @@ import NoThanksState from "./gameState";
 import { NoThanksCard } from "./nothankscard";
 import NoThanksPlayer from "./player";
 
+///
+import gameState, { callUpdateState } from 'pages/store';
+///
+
 export class PassAction extends GameAction {
     private player?: NoThanksPlayer;
 
@@ -16,6 +20,11 @@ export class PassAction extends GameAction {
             this.player.payChip();
             state.addChipToPool();
         }
+
+        ///
+        // callUpdateState(gameState);
+        ///
+
         return state.passTurn();
     }
 

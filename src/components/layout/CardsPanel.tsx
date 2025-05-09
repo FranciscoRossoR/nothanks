@@ -7,6 +7,7 @@ import gameState from 'pages/store';
 
 import NoThanksCard from 'src/components/PlayingCard';
 import PlayingCard from 'src/components/PlayingCard';
+import NoThanksPlayer from 'src/entities/nothanks/player';
 
 type ICardsPanelProps = {
 } & FlexProps;
@@ -17,7 +18,12 @@ export default observer(class CardsPanel extends React.Component<ICardsPanelProp
     }
 
     public render() {
-        const currentPlayer = gameState.players[gameState.whoisturn];
+        // const currentPlayer = gameState.players[gameState.whoisturn];
+
+        ///
+        const currentPlayer = gameState.currentPlayer as NoThanksPlayer;
+        ///
+
         const cards = currentPlayer._cards;
         const actions = gameState.availableActions;
         const deckSize = gameState.deck.size;

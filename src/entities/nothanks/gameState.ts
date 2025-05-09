@@ -1,4 +1,4 @@
-import { makeObservable, observable, computed, action, override } from "mobx";
+import { makeObservable, observable, computed, action, override, autorun, reaction } from "mobx";
 import CardHolder from "../framework/cardholder";
 import GameAction from "../framework/gameAction";
 import UniqueGameElement from "../framework/gameElement";
@@ -12,7 +12,16 @@ import { Resources, chipType } from "./common";
 import NoThanksPlayer from "./player";
 
 ///
+import gameState, { callUpdateState, callUpdateWhoIsTurn } from 'pages/store';
+///
+
+///
 import GameHistory from "../framework/gameHistory";
+///
+
+///
+// autorun(() => {callUpdateState(gameState)})
+// autorun(() => { callUpdateWhoIsTurn(gameState.whoisturn) });
 ///
 
 export default class NoThanksState extends GameState {
@@ -60,10 +69,20 @@ export default class NoThanksState extends GameState {
             removeChipFromPool: action,
 
             ///
+            setPlayers: action,
+            setWhoisturn: action,
+            setStatus: action,
+            setDeck: action,
+            setPool: action,
+
             updateState: action,
             ///
         });
     }
+
+    ///
+    
+    ///
 
     // public get players(): NoThanksPlayer[] {
     //     return this._players;

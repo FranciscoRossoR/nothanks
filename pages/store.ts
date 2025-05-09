@@ -1,8 +1,11 @@
+import { on } from 'events';
 import { io } from 'socket.io-client';
 import CardHolder from 'src/entities/framework/cardholder';
 import GameAction from 'src/entities/framework/gameAction';
 import GameHistory from 'src/entities/framework/gameHistory';
+import { GameStatus } from 'src/entities/framework/gameState';
 import OrderedCardHolder from 'src/entities/framework/orderedcardholder';
+import Player from 'src/entities/framework/player';
 import ResourcesPool from 'src/entities/framework/resourcesPool';
 import { Resources } from 'src/entities/nothanks/common';
 import NoThanksState from 'src/entities/nothanks/gameState';
@@ -23,6 +26,35 @@ export function callUpdateState(emittedState: NoThanksState) {
     socket.emit('callUpdateState', emittedState);
 }
 
+export function callUpdatePlayers(emmitedPlayers: Player[]) {
+    socket.emit('callUpdatePlayers', emmitedPlayers);
+}
+
+export function callUpdateWhoIsTurn(emmitedWhoIsTurn: number,
+        emmitedPlayers: Player[],
+        emmitedDeck: CardHolder<NoThanksCard>) {
+    socket.emit('callUpdateWhoIsTurn', emmitedWhoIsTurn);
+    socket.emit('callUpdatePlayers', emmitedPlayers);
+    socket.emit('callUpdateDeck', emmitedDeck);
+}
+
+export function callUpdateGameStateStatus(emmitedStatus: GameStatus, emmitedPlayers: Player[]) {
+    socket.emit('callUpdateGameStateStatus', emmitedStatus);
+    socket.emit('callUpdatePlayers', emmitedPlayers);
+}
+
+export function callUpdateDeck(emmitedDeck: CardHolder<NoThanksCard>) {
+    socket.emit('callUpdateDeck', emmitedDeck);
+}
+
+export function callUpdatePool(emmitedPool: ResourcesPool<Resources>) {
+    socket.emit('callUpdatePool', emmitedPool);
+}
+
+export function callUpdateHistory(emmitedHistory: GameHistory) {
+    socket.emit('callUpdateHistory', emmitedHistory);
+}
+
 export function callAddPlayer(emittedState: NoThanksState) {
 
     // Testing
@@ -32,7 +64,7 @@ export function callAddPlayer(emittedState: NoThanksState) {
     socket.emit('addPlayer', emittedState);
 
     // debugArea("EMITTED GAMESTATE TYPE", emittedState.constructor.name);
-    debugArea("EMITTED GAMESTATE", emittedState);
+    // debugArea("EMITTED GAMESTATE", emittedState);
     // debugArea("EMITTED GAMESTATE PLAYERS", emittedState.players);
     // debugArea("EMITTED GAMESTATE DECK", emittedState.deck);
     // debugArea("EMITTED GAMESTATE DECK CARDS", emittedState.deck.cards);
@@ -55,7 +87,7 @@ export function callAddPlayer(emittedState: NoThanksState) {
 socket.on('updateState', newState => {
 
     // debugArea("NEW GAMESTATE TYPE", newState.constructor.name);
-    debugArea("NEW GAMESTATE", newState);
+    // debugArea("NEW GAMESTATE", newState);
     // debugArea("NEW GAMESTATE PLAYERS", newState._players);
     // debugArea("NEW GAMESTATE DECK", newState.deck);
     // debugArea("NEW GAMESTATE DECK CARDS", newState.deck.cards);
@@ -92,7 +124,7 @@ socket.on('updateState', newState => {
         // Set cards
         const cards = new OrderedCardHolder<NoThanksCard>([], (a,b) => (b.value - a.value));
         for (const card of playerData._cards.cards){
-            const newCard = new NoThanksCard(card.value, card._uid);
+            const newCard = new NoThanksCard(Math.abs(card.value), card._uid);
             cards.addCard(newCard);
         }
         player.setCards(cards);
@@ -105,7 +137,7 @@ socket.on('updateState', newState => {
     const deck = new CardHolder<NoThanksCard>();
     for (const card of newState.deck.cards){
         // debugArea("NEW GAMESTATE DECK SINGLE CARD", card);
-        const newCard = new NoThanksCard(card.value, card._uid);
+        const newCard = new NoThanksCard(Math.abs(card.value), card._uid);
         deck.addCard(newCard);
     }
     updatedState.setDeck(deck);
@@ -118,7 +150,7 @@ socket.on('updateState', newState => {
     //  Set removedCards
     const removedCards = new CardHolder<NoThanksCard>();
     for (const card of newState.removedCards.cards){
-        const newCard = new NoThanksCard(card.value, card._uid);
+        const newCard = new NoThanksCard(Math.abs(card.value), card._uid);
         removedCards.addCard(newCard);
     }
     updatedState.setRemovedCards(removedCards);
@@ -156,7 +188,7 @@ socket.on('updateState', newState => {
     // gameState.addPlayer("Player " + (gameState.players.length + 1));
 
     // debugArea("UPDATED GAMESTATE TYPE", gameState.constructor.name);
-    debugArea("UPDATED GAMESTATE", gameState);
+    // debugArea("UPDATED GAMESTATE", gameState);
     // debugArea("UPDATED GAMESTATE PLAYERS", gameState.players);
     // debugArea("UPDATED GAMESTATE DECK", gameState.deck);
     // debugArea("UPDATED GAMESTATE DECK CARDS", gameState.deck.cards);
@@ -197,9 +229,71 @@ socket.on('updateState', newState => {
     // debugArea("SAMPLE GAMESTATE PLAYER CARDS CARDS", sampleState.players[0]._cards.cards);
 })
 
+socket.on('updatePlayers', newPlayers => {
 
+    debugArea("NEW PLAYERS", newPlayers);
 
+    const players = newPlayers.map((playerData: any) => {
 
+        // Create player and set name
+        const player = new NoThanksPlayer(playerData.name);
+        // Set color
+        player.setColor(playerData.color);
+        // Set pool
+        const pool = new ResourcesPool<Resources>();
+        for (const [key, value] of playerData._pool._pool) {
+            debugArea("PLAYER DATA POOL POOL KEY", key);
+            debugArea("PLAYER DATA POOL POOL VALUE", value);
+            pool.addResources(key, value);
+        }
+        player.setPool(pool);
+        // Set cards
+        const cards = new OrderedCardHolder<NoThanksCard>([], (a,b) => (b.value - a.value));
+        for (const card of playerData._cards.cards){
+            const newCard = new NoThanksCard(Math.abs(card.value), card._uid);
+            cards.addCard(newCard);
+        }
+        player.setCards(cards);
+        return player;
+    });
+
+    gameState.setPlayers(players);
+
+})
+
+socket.on('updateWhoIsTurn', newWhoIsTurn => {
+    debugArea("NEW WHOISTURN", newWhoIsTurn);
+    gameState.setWhoisturn(newWhoIsTurn);
+})
+
+socket.on('updateGameStateStatus', newGameStateStatus => {
+    gameState.setStatus(newGameStateStatus);
+})
+
+socket.on('updateDeck', newDeck => {
+    debugArea("NEW DECK", newDeck);
+    const deck = new CardHolder<NoThanksCard>();
+    for (const card of newDeck.cards){
+        const newCard = new NoThanksCard(Math.abs(card.value) , card._uid);
+        deck.addCard(newCard);
+    }
+    gameState.setDeck(deck);
+})
+
+socket.on('updatePool', newPool => {
+    const pool = new ResourcesPool<Resources>();
+    for (const [key, value] of newPool._pool){
+        pool.addResources(key, value);
+    }
+    gameState.setPool(pool);
+})
+
+socket.on('updateHistory', newHistory => {
+    const history = new GameHistory();
+    for (const [key, value] of Object.entries(newHistory)){
+        history.addAction(value as GameAction);
+    }
+})
 
 
 
