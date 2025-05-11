@@ -52,11 +52,14 @@ export function callUpdateDeck(emmitedDeck: CardHolder<NoThanksCard>) {
     socket.emit('callUpdateDeck', emmitedDeck);
 }
 
-export function callUpdatePool(emmitedPool: ResourcesPool<Resources>
+export function callUpdatePool(
+        emmitedPool: ResourcesPool<Resources>
         , emmitedPlayers: Player[]
+        , emmitedDeck: CardHolder<NoThanksCard>
     ) {
     socket.emit('callUpdatePool', emmitedPool);
     socket.emit('callUpdatePlayers', emmitedPlayers);
+    socket.emit('callUpdateDeck', emmitedDeck);
 }
 
 export function callUpdateHistory(emmitedHistory: GameHistory) {

@@ -182,6 +182,7 @@ reaction(() => gameState.status, () => {callUpdateGameStateStatus(
 reaction(() => gameState.pool._pool.get('chips'), () => {callUpdatePool(
     gameState.pool
     , gameState.players
+    , gameState.deck
 )});
 
 // HISTORY
