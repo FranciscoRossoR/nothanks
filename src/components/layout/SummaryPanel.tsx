@@ -155,17 +155,21 @@ function NewPlayerDrawer(props: IDrawerProps) {
     //         gameState.players)
     // });
 // reaction(() => gameState.whoisturn, () => {callUpdateWhoIsTurn(gameState.whoisturn, gameState.players)});
-reaction(() => gameState.whoisturn, () => {callUpdateWhoIsTurn(gameState.whoisturn,
-    gameState.players,
-    gameState.deck)});
+reaction(() => gameState.whoisturn, () => {callUpdateWhoIsTurn(
+    gameState.whoisturn
+    , gameState.players
+    , gameState.deck
+)});
     
 // GAMESTATE STATUS
 // autorun(() => {
     //     callUpdateGameStateStatus(gameState.status,
     //         gameState.players)
     // });
-reaction(() => gameState.status, () => {callUpdateGameStateStatus(gameState.status,
-    gameState.players)});
+reaction(() => gameState.status, () => {callUpdateGameStateStatus(
+    gameState.status
+    , gameState.players
+)});
 
 // DECK
 // Este por algún motivo hace que no cojan cartas
@@ -175,7 +179,10 @@ reaction(() => gameState.status, () => {callUpdateGameStateStatus(gameState.stat
 // reaction(() => gameState.deck.cards, () => {callUpdateDeck(gameState.deck)}) // No sincroniza
 
 // POOL
-reaction(() => gameState.pool._pool.get('chips'), () => {callUpdatePool(gameState.pool)});
+reaction(() => gameState.pool._pool.get('chips'), () => {callUpdatePool(
+    gameState.pool
+    , gameState.players
+)});
 
 // HISTORY
 // reaction(() => gameState.history, () => {callUpdateHistory(gameState.history)});

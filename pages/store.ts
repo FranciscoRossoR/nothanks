@@ -30,15 +30,20 @@ export function callUpdatePlayers(emmitedPlayers: Player[]) {
     socket.emit('callUpdatePlayers', emmitedPlayers);
 }
 
-export function callUpdateWhoIsTurn(emmitedWhoIsTurn: number,
-        emmitedPlayers: Player[],
-        emmitedDeck: CardHolder<NoThanksCard>) {
+export function callUpdateWhoIsTurn(
+        emmitedWhoIsTurn: number
+        , emmitedPlayers: Player[]
+        , emmitedDeck: CardHolder<NoThanksCard>
+    ) {
     socket.emit('callUpdateWhoIsTurn', emmitedWhoIsTurn);
-    socket.emit('callUpdatePlayers', emmitedPlayers);
+    // socket.emit('callUpdatePlayers', emmitedPlayers);
     socket.emit('callUpdateDeck', emmitedDeck);
 }
 
-export function callUpdateGameStateStatus(emmitedStatus: GameStatus, emmitedPlayers: Player[]) {
+export function callUpdateGameStateStatus(
+        emmitedStatus: GameStatus
+        , emmitedPlayers: Player[]
+    ) {
     socket.emit('callUpdateGameStateStatus', emmitedStatus);
     socket.emit('callUpdatePlayers', emmitedPlayers);
 }
@@ -47,8 +52,11 @@ export function callUpdateDeck(emmitedDeck: CardHolder<NoThanksCard>) {
     socket.emit('callUpdateDeck', emmitedDeck);
 }
 
-export function callUpdatePool(emmitedPool: ResourcesPool<Resources>) {
+export function callUpdatePool(emmitedPool: ResourcesPool<Resources>
+        , emmitedPlayers: Player[]
+    ) {
     socket.emit('callUpdatePool', emmitedPool);
+    socket.emit('callUpdatePlayers', emmitedPlayers);
 }
 
 export function callUpdateHistory(emmitedHistory: GameHistory) {
