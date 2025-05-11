@@ -36,7 +36,7 @@ export function callUpdateWhoIsTurn(
         , emmitedDeck: CardHolder<NoThanksCard>
     ) {
     socket.emit('callUpdateWhoIsTurn', emmitedWhoIsTurn);
-    // socket.emit('callUpdatePlayers', emmitedPlayers);
+    socket.emit('callUpdatePlayers', emmitedPlayers);
     socket.emit('callUpdateDeck', emmitedDeck);
 }
 
