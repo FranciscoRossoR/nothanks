@@ -14,6 +14,7 @@ import { chipType } from 'src/entities/nothanks/common'
 
 import PlayerProfile from 'src/components/PlayerProfile';
 import MiniPlayerProfile from 'src/components/MiniPlayerProfile';
+import Player from 'src/entities/framework/player';
 
 
 export interface IPanelProps {
@@ -41,11 +42,12 @@ export default observer(function SummaryPanel(props: IPanelProps) {
     return (
         <Box ref={boxRef} __css={isMiniVersion ? sticky : {}} bgColor="brand.50">
             <Flex bgColor="brand.50" justifyContent="center">
-                {gameState.players.map((p: NoThanksPlayer, index: number) => {
-                    const chips = p._pool.getResources(chipType) || 0;
+                {gameState.players.map((p: Player, index: number) => {
+                    const ntp = p as NoThanksPlayer;
+                    const chips = ntp._pool.getResources(chipType) || 0;
                     const isCurrent = gameState.whoisturn === index;
                     const info = new Map<string, string>().
-                        set("Score", p.score.toString()).
+                        set("Score", ntp.score.toString()).
                         set("Chips", chips.toString());
                     return (
                         isMiniVersion
