@@ -24,4 +24,8 @@ io.on('connection', (socket) => {
         io.emit('updateTurn', newTurn);
     })
 
+    socket.on('callUpdatePool', (newPool) => {
+        io.emit('updatePool', newPool)
+    })
+
 })
