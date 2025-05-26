@@ -7,7 +7,7 @@ import {
     Flex, useDimensions, useDisclosure, HStack
 } from '@chakra-ui/react';
 
-import gameState, { callUpdateDeck, callUpdatePlayers, callUpdateStatus } from 'pages/store';
+import gameState, { callUpdateDeck, callUpdatePlayers, callUpdateStatus, callUpdateTurn } from 'pages/store';
 
 import NoThanksPlayer from 'src/entities/nothanks/player';
 import { chipType } from 'src/entities/nothanks/common'
@@ -106,4 +106,10 @@ function NewPlayerDrawer(props: IDrawerProps) {
 reaction(() => gameState.status, () => { callUpdateStatus(
     gameState.status
     , gameState.players
-)})
+)});
+
+reaction(() => gameState.whoisturn, () => { callUpdateTurn(
+    gameState.whoisturn
+    , gameState.players
+    , gameState.deck
+)});

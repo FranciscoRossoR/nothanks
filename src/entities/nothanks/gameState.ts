@@ -54,6 +54,7 @@ export default class NoThanksState extends GameState {
             setPlayers: action,
             setStatus: action,
             setDeck: action,
+            setWhoisturn: action,
         });
     }
 
@@ -164,6 +165,10 @@ export default class NoThanksState extends GameState {
 
     public setDeck(deck: CardHolder<NoThanksCard>) {
         this.deck = deck;
+    }
+
+    public setWhoisturn(whoisturn: number) {
+        this.whoisturn = whoisturn;
     }
 
 }
