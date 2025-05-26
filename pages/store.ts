@@ -34,6 +34,16 @@ export function callUpdateDeck(emittedDeck: CardHolder<NoThanksCard>) {
     socket.emit('callUpdateDeck', emittedDeck);
 }
 
+export function callUpdateTurn(
+        emittedTurn: number
+        , emittedPlayers: Player[]
+        , emittedDeck: CardHolder<NoThanksCard>
+    ) {
+    socket.emit('callUpdateTurn', emittedTurn);
+    socket.emit('callUpdatePlayers', emittedPlayers);
+    socket.emit('callUpdateDeck', emittedDeck);
+}
+
 
 socket.on('updatePlayers', newPlayers => {
 
@@ -77,4 +87,8 @@ socket.on('updateDeck', newDeck => {
         deck.addCard(newCard);
     }
     gameState.setDeck(deck);
+})
+
+socket.on('updateTurn', newTurn => {
+    gameState.setWhoisturn(newTurn);
 })

@@ -20,4 +20,8 @@ io.on('connection', (socket) => {
         io.emit('updateDeck', newDeck);
     })
 
+    socket.on('callUpdateTurn', (newTurn) => {
+        io.emit('updateTurn', newTurn);
+    })
+
 })
