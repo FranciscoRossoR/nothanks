@@ -7,7 +7,7 @@ export interface ICard {
 }
 
 export default class Card extends UniqueGameElement implements ICard {
-    public constructor (readonly name: string) {
-        super();
+    public constructor (readonly name: string, uid?: string) {
+        super(uid);
     }
 }
