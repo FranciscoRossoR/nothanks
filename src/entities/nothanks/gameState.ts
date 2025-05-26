@@ -53,6 +53,7 @@ export default class NoThanksState extends GameState {
             removeChipFromPool: action,
             setPlayers: action,
             setStatus: action,
+            setDeck: action,
         });
     }
 
@@ -159,6 +160,10 @@ export default class NoThanksState extends GameState {
 
     public setStatus(status: GameStatus) {
         this.status = status;
+    }
+
+    public setDeck(deck: CardHolder<NoThanksCard>) {
+        this.deck = deck;
     }
 
 }

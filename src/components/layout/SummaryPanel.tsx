@@ -7,7 +7,7 @@ import {
     Flex, useDimensions, useDisclosure, HStack
 } from '@chakra-ui/react';
 
-import gameState, { callUpdatePlayers, callUpdateStatus } from 'pages/store';
+import gameState, { callUpdateDeck, callUpdatePlayers, callUpdateStatus } from 'pages/store';
 
 import NoThanksPlayer from 'src/entities/nothanks/player';
 import { chipType } from 'src/entities/nothanks/common'
@@ -28,6 +28,7 @@ function onAddPlayer(event: React.MouseEvent<HTMLButtonElement>) {
 
 function onStart(event: React.MouseEvent<HTMLButtonElement>) {
     gameState.startGame();
+    callUpdateDeck(gameState.deck);
 }
 
 export default observer(function SummaryPanel(props: IPanelProps) {

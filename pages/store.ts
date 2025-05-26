@@ -1,4 +1,5 @@
 import { io } from 'socket.io-client';
+import CardHolder from 'src/entities/framework/cardholder';
 import { GameStatus } from 'src/entities/framework/gameState';
 import OrderedCardHolder from 'src/entities/framework/orderedcardholder';
 import Player from 'src/entities/framework/player';
@@ -27,7 +28,11 @@ export function callUpdateStatus(
     ) {
     socket.emit('callUpdateStatus', emittedStatus);
     socket.emit('callUpdatePlayers', emittedPlayers);
-    }
+}
+
+export function callUpdateDeck(emittedDeck: CardHolder<NoThanksCard>) {
+    socket.emit('callUpdateDeck', emittedDeck);
+}
 
 
 socket.on('updatePlayers', newPlayers => {
@@ -63,4 +68,13 @@ socket.on('updatePlayers', newPlayers => {
 
 socket.on('updateStatus', newStatus => {
     gameState.setStatus(newStatus);
+})
+
+socket.on('updateDeck', newDeck => {
+    const deck = new CardHolder<NoThanksCard>();
+    for (const card of newDeck.cards) {
+        const newCard = new NoThanksCard(Math.abs(card.value), card._uid);
+        deck.addCard(newCard);
+    }
+    gameState.setDeck(deck);
 })
