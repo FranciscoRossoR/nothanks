@@ -50,7 +50,8 @@ export default class NoThanksState extends GameState {
             currentPlayer: computed,
             currentWinners: computed,
             addChipToPool: action,
-            removeChipFromPool: action
+            removeChipFromPool: action,
+            setPlayers: action,
         });
     }
 
@@ -147,6 +148,12 @@ export default class NoThanksState extends GameState {
             }
         }
         return winners;
+    }
+
+    // Setters
+
+    public setPlayers(players: NoThanksPlayer[]) {
+        this.players = players;
     }
 
 }

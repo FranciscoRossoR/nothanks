@@ -7,7 +7,7 @@ import {
     Flex, useDimensions, useDisclosure, HStack
 } from '@chakra-ui/react';
 
-import gameState from 'pages/store';
+import gameState, { callUpdatePlayers } from 'pages/store';
 
 import NoThanksPlayer from 'src/entities/nothanks/player';
 import { chipType } from 'src/entities/nothanks/common'
@@ -22,6 +22,7 @@ export interface IPanelProps {
 
 function onAddPlayer(event: React.MouseEvent<HTMLButtonElement>) {
     gameState.addPlayer("Player " + (gameState.players.length + 1));
+    callUpdatePlayers(gameState.players);
 }
 
 function onStart(event: React.MouseEvent<HTMLButtonElement>) {

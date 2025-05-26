@@ -1,5 +1,10 @@
 import { io } from 'socket.io-client';
+import OrderedCardHolder from 'src/entities/framework/orderedcardholder';
+import Player from 'src/entities/framework/player';
+import ResourcesPool from 'src/entities/framework/resourcesPool';
+import { Resources } from 'src/entities/nothanks/common';
 import NoThanksState from 'src/entities/nothanks/gameState';
+import { NoThanksCard } from 'src/entities/nothanks/nothankscard';
 import NoThanksPlayer from 'src/entities/nothanks/player';
 
 const socket = io('http://localhost:8080');
@@ -7,9 +12,41 @@ socket.on('connect', () => {
     console.log(`You connected with id: ${socket.id}`);
 });
 
-const players = [new NoThanksPlayer("Player 1"),
-                 new NoThanksPlayer("Player 2"),
-                 new NoThanksPlayer("Player 3"),];
-const gameState = new NoThanksState(players,[]);
+var gameState = new NoThanksState();
 
 export default gameState;
+
+export function callUpdatePlayers(emittedPlayers: Player[]) {
+    socket.emit('callUpdatePlayers', emittedPlayers);
+}
+
+socket.on('updatePlayers', newPlayers => {
+
+    const players = newPlayers.map((playerData: any) => {
+
+        // Create player and set name
+        const player = new NoThanksPlayer(playerData.name);
+        // Set color
+        player.setColor(playerData.color);
+        // Set pool
+        const pool = new ResourcesPool<Resources>();
+        for (const [key, value] of playerData._pool._pool) {
+            pool.addResources(key, value);
+        }
+        player.setPool(pool);
+        // Set cards
+        const cards = new OrderedCardHolder<NoThanksCard>([], (a, b) =>
+            (b.value - a.value));
+        for (const card of playerData._cards.cards) {
+            const newCard = new NoThanksCard(Math.abs(card.value), card._uid);
+            cards.addCard(newCard);
+        }
+        player.setCards(cards);
+
+        return player;
+        
+    });
+
+    gameState.setPlayers(players);
+    
+})
