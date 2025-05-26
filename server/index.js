@@ -16,4 +16,8 @@ io.on('connection', (socket) => {
         io.emit('updateStatus', newStatus);
     })
 
+    socket.on('callUpdateDeck', (newDeck) => {
+        io.emit('updateDeck', newDeck);
+    })
+
 })
