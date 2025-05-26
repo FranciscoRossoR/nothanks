@@ -7,7 +7,7 @@ import {
     Flex, useDimensions, useDisclosure, HStack
 } from '@chakra-ui/react';
 
-import gameState, { callUpdatePlayers } from 'pages/store';
+import gameState, { callUpdatePlayers, callUpdateStatus } from 'pages/store';
 
 import NoThanksPlayer from 'src/entities/nothanks/player';
 import { chipType } from 'src/entities/nothanks/common'
@@ -15,6 +15,7 @@ import { chipType } from 'src/entities/nothanks/common'
 import PlayerProfile from 'src/components/PlayerProfile';
 import MiniPlayerProfile from 'src/components/MiniPlayerProfile';
 import Player from 'src/entities/framework/player';
+import { reaction } from 'mobx';
 
 
 export interface IPanelProps {
@@ -98,3 +99,10 @@ function NewPlayerDrawer(props: IDrawerProps) {
         </Drawer>
     );
 }
+
+// Sync GameState
+
+reaction(() => gameState.status, () => { callUpdateStatus(
+    gameState.status
+    , gameState.players
+)})
