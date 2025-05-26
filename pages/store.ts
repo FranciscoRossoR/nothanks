@@ -44,6 +44,16 @@ export function callUpdateTurn(
     socket.emit('callUpdateDeck', emittedDeck);
 }
 
+export function callUpdatePool(
+        emittedPool: ResourcesPool<Resources>
+        , emittedPlayers: Player[]
+        , emittedDeck: CardHolder<NoThanksCard>
+    ) {
+    socket.emit('callUpdatePool', emittedPool);
+    socket.emit('callUpdatePlayers', emittedPlayers);
+    socket.emit('callUpdateDeck', emittedDeck);
+}
+
 
 socket.on('updatePlayers', newPlayers => {
 
@@ -91,4 +101,12 @@ socket.on('updateDeck', newDeck => {
 
 socket.on('updateTurn', newTurn => {
     gameState.setWhoisturn(newTurn);
+})
+
+socket.on('updatePool', newPool => {
+    const pool = new ResourcesPool<Resources>();
+    for (const [key, value] of newPool._pool) {
+        pool.addResources(key, value);
+    }
+    gameState.setPool(pool);
 })

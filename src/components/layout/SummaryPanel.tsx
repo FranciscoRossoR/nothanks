@@ -7,7 +7,7 @@ import {
     Flex, useDimensions, useDisclosure, HStack
 } from '@chakra-ui/react';
 
-import gameState, { callUpdateDeck, callUpdatePlayers, callUpdateStatus, callUpdateTurn } from 'pages/store';
+import gameState, { callUpdateDeck, callUpdatePlayers, callUpdateStatus, callUpdateTurn, callUpdatePool } from 'pages/store';
 
 import NoThanksPlayer from 'src/entities/nothanks/player';
 import { chipType } from 'src/entities/nothanks/common'
@@ -110,6 +110,12 @@ reaction(() => gameState.status, () => { callUpdateStatus(
 
 reaction(() => gameState.whoisturn, () => { callUpdateTurn(
     gameState.whoisturn
+    , gameState.players
+    , gameState.deck
+)});
+
+reaction(() => gameState.pool._pool.get('chips'), () => { callUpdatePool(
+    gameState.pool
     , gameState.players
     , gameState.deck
 )});
