@@ -12,4 +12,8 @@ io.on('connection', (socket) => {
         io.emit('updatePlayers', newPlayers);
     })
 
+    socket.on('callUpdateStatus', (newStatus) => {
+        io.emit('updateStatus', newStatus);
+    })
+
 })

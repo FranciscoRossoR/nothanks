@@ -1,4 +1,5 @@
 import { io } from 'socket.io-client';
+import { GameStatus } from 'src/entities/framework/gameState';
 import OrderedCardHolder from 'src/entities/framework/orderedcardholder';
 import Player from 'src/entities/framework/player';
 import ResourcesPool from 'src/entities/framework/resourcesPool';
@@ -19,6 +20,15 @@ export default gameState;
 export function callUpdatePlayers(emittedPlayers: Player[]) {
     socket.emit('callUpdatePlayers', emittedPlayers);
 }
+
+export function callUpdateStatus(
+        emittedStatus: GameStatus
+        , emittedPlayers: Player[]
+    ) {
+    socket.emit('callUpdateStatus', emittedStatus);
+    socket.emit('callUpdatePlayers', emittedPlayers);
+    }
+
 
 socket.on('updatePlayers', newPlayers => {
 
@@ -49,4 +59,8 @@ socket.on('updatePlayers', newPlayers => {
 
     gameState.setPlayers(players);
     
+})
+
+socket.on('updateStatus', newStatus => {
+    gameState.setStatus(newStatus);
 })

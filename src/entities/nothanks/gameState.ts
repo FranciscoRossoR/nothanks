@@ -52,6 +52,7 @@ export default class NoThanksState extends GameState {
             addChipToPool: action,
             removeChipFromPool: action,
             setPlayers: action,
+            setStatus: action,
         });
     }
 
@@ -154,6 +155,10 @@ export default class NoThanksState extends GameState {
 
     public setPlayers(players: NoThanksPlayer[]) {
         this.players = players;
+    }
+
+    public setStatus(status: GameStatus) {
+        this.status = status;
     }
 
 }
