@@ -1,9 +1,9 @@
 import { io } from 'socket.io-client';
-import CardHolder from 'src/entities/framework/cardholder';
-import { GameStatus } from 'src/entities/framework/gameState';
-import OrderedCardHolder from 'src/entities/framework/orderedcardholder';
-import Player from 'src/entities/framework/player';
-import ResourcesPool from 'src/entities/framework/resourcesPool';
+import CardHolder from 'framework/entities/cardholder';
+import { GameStatus } from 'framework/entities/gameState';
+import OrderedCardHolder from 'framework/entities/orderedcardholder';
+import Player from 'framework/entities/player';
+import ResourcesPool from 'framework/entities/resourcesPool';
 import { Resources } from 'src/entities/nothanks/common';
 import NoThanksState from 'src/entities/nothanks/gameState';
 import { NoThanksCard } from 'src/entities/nothanks/nothankscard';
