@@ -4,28 +4,20 @@ const io = require('socket.io')(8080, {
     },
 });
 
+const updateTypes = new Map();
+
 io.on('connection', (socket) => {
 
     console.log(socket.id);
 
-    socket.on('callUpdatePlayers', (newPlayers) => {
-        io.emit('updatePlayers', newPlayers);
-    })
+    socket.on('loadUpdateTypes', (types) => {
+        for (const [key, value] of Object.entries(types)) {
+            updateTypes.set(key, value);
+        }
+    });
 
-    socket.on('callUpdateStatus', (newStatus) => {
-        io.emit('updateStatus', newStatus);
-    })
+    socket.on('callUpdate', (key, update) => {
+        io.emit(updateTypes.get(key), update);
+    });
 
-    socket.on('callUpdateDeck', (newDeck) => {
-        io.emit('updateDeck', newDeck);
-    })
-
-    socket.on('callUpdateTurn', (newTurn) => {
-        io.emit('updateTurn', newTurn);
-    })
-
-    socket.on('callUpdatePool', (newPool) => {
-        io.emit('updatePool', newPool)
-    })
-
-})
+});
