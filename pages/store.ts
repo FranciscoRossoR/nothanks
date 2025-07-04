@@ -1,9 +1,9 @@
 import { io } from 'socket.io-client';
-import CardHolder from 'src/entities/framework/cardholder';
-import { GameStatus } from 'src/entities/framework/gameState';
-import OrderedCardHolder from 'src/entities/framework/orderedcardholder';
-import Player from 'src/entities/framework/player';
-import ResourcesPool from 'src/entities/framework/resourcesPool';
+import CardHolder from 'framework/entities/cardholder';
+import { GameStatus } from 'framework/entities/gameState';
+import OrderedCardHolder from 'framework/entities/orderedcardholder';
+import Player from 'framework/entities/player';
+import ResourcesPool from 'framework/entities/resourcesPool';
 import { Resources } from 'src/entities/nothanks/common';
 import NoThanksState from 'src/entities/nothanks/gameState';
 import { NoThanksCard } from 'src/entities/nothanks/nothankscard';
@@ -11,27 +11,40 @@ import NoThanksPlayer from 'src/entities/nothanks/player';
 
 const socket = io('http://localhost:8080');
 socket.on('connect', () => {
+    // Report connection
     console.log(`You connected with id: ${socket.id}`);
+    // Load to the server the update types that will be called
+    const updateTypes = new Map();
+    updateTypes.set('callUpdatePlayers', 'updatePlayers');
+    updateTypes.set('callUpdateStatus', 'updateStatus');
+    updateTypes.set('callUpdateDeck', 'updateDeck');
+    updateTypes.set('callUpdateTurn', 'updateTurn');
+    updateTypes.set('callUpdatePool', 'updatePool');
+    socket.emit('loadUpdateTypes', Object.fromEntries(updateTypes));
 });
 
 var gameState = new NoThanksState();
 
 export default gameState;
 
+function callUpdate(name: String, update: any) {
+    socket.emit('callUpdate', name, update);
+}
+
 export function callUpdatePlayers(emittedPlayers: Player[]) {
-    socket.emit('callUpdatePlayers', emittedPlayers);
+    callUpdate('callUpdatePlayers', emittedPlayers);
 }
 
 export function callUpdateStatus(
         emittedStatus: GameStatus
         , emittedPlayers: Player[]
     ) {
-    socket.emit('callUpdateStatus', emittedStatus);
-    socket.emit('callUpdatePlayers', emittedPlayers);
+    callUpdate('callUpdateStatus', emittedStatus);
+    callUpdate('callUpdatePlayers', emittedPlayers);
 }
 
 export function callUpdateDeck(emittedDeck: CardHolder<NoThanksCard>) {
-    socket.emit('callUpdateDeck', emittedDeck);
+    callUpdate('callUpdateDeck', emittedDeck);
 }
 
 export function callUpdateTurn(
@@ -39,9 +52,9 @@ export function callUpdateTurn(
         , emittedPlayers: Player[]
         , emittedDeck: CardHolder<NoThanksCard>
     ) {
-    socket.emit('callUpdateTurn', emittedTurn);
-    socket.emit('callUpdatePlayers', emittedPlayers);
-    socket.emit('callUpdateDeck', emittedDeck);
+    callUpdate('callUpdateTurn', emittedTurn);
+    callUpdate('callUpdatePlayers', emittedPlayers);
+    callUpdate('callUpdateDeck', emittedDeck);
 }
 
 export function callUpdatePool(
@@ -49,9 +62,9 @@ export function callUpdatePool(
         , emittedPlayers: Player[]
         , emittedDeck: CardHolder<NoThanksCard>
     ) {
-    socket.emit('callUpdatePool', emittedPool);
-    socket.emit('callUpdatePlayers', emittedPlayers);
-    socket.emit('callUpdateDeck', emittedDeck);
+    callUpdate('callUpdatePool', emittedPool);
+    callUpdate('callUpdatePlayers', emittedPlayers);
+    callUpdate('callUpdateDeck', emittedDeck);
 }
 
 

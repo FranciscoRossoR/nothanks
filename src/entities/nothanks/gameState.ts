@@ -1,10 +1,10 @@
 import { makeObservable, observable, computed, action, override } from "mobx";
-import CardHolder from "../framework/cardholder";
-import GameAction from "../framework/gameAction";
-import UniqueGameElement from "../framework/gameElement";
-import GameState, { GameStatus } from "../framework/gameState"
-import ResourcesPool from "../framework/resourcesPool";
-import ComplexityAnalyst from "../framework/complexityAnalyst";
+import CardHolder from "framework/entities/cardholder";
+import GameAction from "framework/entities/gameAction";
+import UniqueGameElement from "framework/entities/gameElement";
+import GameState, { GameStatus } from "framework/entities/gameState"
+import ResourcesPool from "framework/entities/resourcesPool";
+import ComplexityAnalyst from "framework/entities/complexityAnalyst";
 
 import { GetCardAction, PassAction } from "./actions";
 import { NoThanksCard } from "./nothankscard";

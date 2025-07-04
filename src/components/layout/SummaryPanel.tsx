@@ -14,7 +14,7 @@ import { chipType } from 'src/entities/nothanks/common'
 
 import PlayerProfile from 'src/components/PlayerProfile';
 import MiniPlayerProfile from 'src/components/MiniPlayerProfile';
-import Player from 'src/entities/framework/player';
+import Player from 'framework/entities/player';
 import { reaction } from 'mobx';
 
 

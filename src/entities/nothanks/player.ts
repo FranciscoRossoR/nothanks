@@ -3,9 +3,9 @@ import { action, computed, makeObservable, observable, override } from "mobx";
 import { NoThanksCard } from "./nothankscard";
 import { Resources, chipType } from "./common";
 
-import OrderedCardHolder from "../framework/orderedcardholder";
-import Player from "../framework/player";
-import ResourcesPool from "../framework/resourcesPool";
+import OrderedCardHolder from "framework/entities/orderedcardholder";
+import Player from "framework/entities/player";
+import ResourcesPool from "framework/entities/resourcesPool";
 
 
 export default class NoThanksPlayer extends Player {

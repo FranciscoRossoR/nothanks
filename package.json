@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest --watch",
-    "server": "node --watch ./server/index.js"
+    "server": "node --watch ./framework/server/index.js"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.8.6",
