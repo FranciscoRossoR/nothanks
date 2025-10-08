@@ -1,9 +1,9 @@
-import Card from "../framework/card"
+import Card from "framework/entities/card"
 
 export class NoThanksCard extends Card {
     readonly value: number;
-    public constructor (value: number) {
-        super (value.toString());
+    public constructor (value: number, uid?: string) {
+        super (value.toString(), uid);
         this.value = -value;
     }
 

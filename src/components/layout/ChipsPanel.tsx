@@ -7,6 +7,7 @@ import gameState from 'pages/store';
 
 import { chipType } from 'src/entities/nothanks/common';
 import Chips from '../Chips';
+import NoThanksPlayer from 'src/entities/nothanks/player';
 
 type IChipsPanelProps = {
 } & FlexProps;
@@ -17,7 +18,7 @@ export default observer(class ChipsPanel extends React.Component<IChipsPanelProp
     }
 
     public render() {
-        const currentPlayer = gameState.players[gameState.whoisturn];
+        const currentPlayer = gameState.currentPlayer as NoThanksPlayer;
         const playerChips = currentPlayer._pool.getResources(chipType) || 0;
         const boardChips = gameState.pool.getResources(chipType) || 0;
         const actions = gameState.availableActions;

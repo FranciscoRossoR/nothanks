@@ -3,9 +3,9 @@ import { action, computed, makeObservable, observable, override } from "mobx";
 import { NoThanksCard } from "./nothankscard";
 import { Resources, chipType } from "./common";
 
-import OrderedCardHolder from "../framework/orderedcardholder";
-import Player from "../framework/player";
-import ResourcesPool from "../framework/resourcesPool";
+import OrderedCardHolder from "framework/entities/orderedcardholder";
+import Player from "framework/entities/player";
+import ResourcesPool from "framework/entities/resourcesPool";
 
 
 export default class NoThanksPlayer extends Player {
@@ -56,5 +56,19 @@ export default class NoThanksPlayer extends Player {
     public get hasEnoughChips() : boolean {
         const chips = this._pool.getResources(chipType) || 0;
         return chips > 0;
+    }
+
+    // Setters
+
+    public setColor(color: string) {
+        this.color = color;
+    }
+
+    public setPool(pool: ResourcesPool<Resources>) {
+        this._pool = pool;
+    }
+
+    public setCards(cards: OrderedCardHolder<NoThanksCard>) {
+        this._cards = cards;
     }
 }

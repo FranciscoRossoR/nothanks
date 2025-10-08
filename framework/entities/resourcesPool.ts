@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
 
 export default class ResourcesPool<ResourceKind> {
-    protected _pool: Map<ResourceKind,number>;
+    _pool: Map<ResourceKind,number>;
 
     public constructor()
     public constructor(kinds?: ResourceKind[]) {

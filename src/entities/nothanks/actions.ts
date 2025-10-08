@@ -1,4 +1,4 @@
-import GameAction from "../framework/gameAction";
+import GameAction from "framework/entities/gameAction";
 import NoThanksState from "./gameState";
 import { NoThanksCard } from "./nothankscard";
 import NoThanksPlayer from "./player";

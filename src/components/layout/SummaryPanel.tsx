@@ -7,13 +7,15 @@ import {
     Flex, useDimensions, useDisclosure, HStack
 } from '@chakra-ui/react';
 
-import gameState from 'pages/store';
+import gameState, { callUpdateDeck, callUpdatePlayers, callUpdateStatus, callUpdateTurn, callUpdatePool } from 'pages/store';
 
 import NoThanksPlayer from 'src/entities/nothanks/player';
 import { chipType } from 'src/entities/nothanks/common'
 
 import PlayerProfile from 'src/components/PlayerProfile';
 import MiniPlayerProfile from 'src/components/MiniPlayerProfile';
+import Player from 'framework/entities/player';
+import { reaction } from 'mobx';
 
 
 export interface IPanelProps {
@@ -21,10 +23,12 @@ export interface IPanelProps {
 
 function onAddPlayer(event: React.MouseEvent<HTMLButtonElement>) {
     gameState.addPlayer("Player " + (gameState.players.length + 1));
+    callUpdatePlayers(gameState.players);
 }
 
 function onStart(event: React.MouseEvent<HTMLButtonElement>) {
     gameState.startGame();
+    callUpdateDeck(gameState.deck);
 }
 
 export default observer(function SummaryPanel(props: IPanelProps) {
@@ -41,11 +45,12 @@ export default observer(function SummaryPanel(props: IPanelProps) {
     return (
         <Box ref={boxRef} __css={isMiniVersion ? sticky : {}} bgColor="brand.50">
             <Flex bgColor="brand.50" justifyContent="center">
-                {gameState.players.map((p: NoThanksPlayer, index: number) => {
-                    const chips = p._pool.getResources(chipType) || 0;
+                {gameState.players.map((p: Player, index: number) => {
+                    const ntp = p as NoThanksPlayer;
+                    const chips = ntp._pool.getResources(chipType) || 0;
                     const isCurrent = gameState.whoisturn === index;
                     const info = new Map<string, string>().
-                        set("Score", p.score.toString()).
+                        set("Score", ntp.score.toString()).
                         set("Chips", chips.toString());
                     return (
                         isMiniVersion
@@ -95,3 +100,22 @@ function NewPlayerDrawer(props: IDrawerProps) {
         </Drawer>
     );
 }
+
+// Sync GameState
+
+reaction(() => gameState.status, () => { callUpdateStatus(
+    gameState.status
+    , gameState.players
+)});
+
+reaction(() => gameState.whoisturn, () => { callUpdateTurn(
+    gameState.whoisturn
+    , gameState.players
+    , gameState.deck
+)});
+
+reaction(() => gameState.pool._pool.get('chips'), () => { callUpdatePool(
+    gameState.pool
+    , gameState.players
+    , gameState.deck
+)});

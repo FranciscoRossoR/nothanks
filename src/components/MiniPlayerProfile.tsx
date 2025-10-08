@@ -17,7 +17,7 @@ import {
     DrawerBody,
 } from '@chakra-ui/react';
 
-import Player from 'src/entities/framework/player';
+import Player from 'framework/entities/player';
 
 type IPlayerProfile = Player & {
     image?: string;
