@@ -2,8 +2,7 @@ import React from 'react';
 
 import { Box, BoxProps, Heading, ThemingProps, useStyleConfig } from '@chakra-ui/react';
 import { mergeWith } from '@chakra-ui/utils';
-
-import { ICard } from 'src/entities/framework/card'
+import { ICard } from 'framework/entities/card';
 
 type ICardProps = ICard & ThemingProps & BoxProps;
 
